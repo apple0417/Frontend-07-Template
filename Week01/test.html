@@ -1,18 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>test document</title>
-    <style>
-        .box{
-            width: 100px;
-            height: 100px;
-            background-color: pink;
+<style>
+    .ceil{
+        width: 100px;
+        height: 100px;
+        border: 1px solid white;
+        display: inline-block;
+        vertical-align: middle;
+        background-color: green;
+
+        text-align: center;
+        line-height: 100px;
+        font-size: 50px;
+
+    }
+</style>
+
+
+<div class="board"></div>
+
+<script>
+    let pattern = [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+    ];
+
+    let color = 1;
+    let len = pattern.length;
+
+    function show(){
+        const board = document.querySelector(".board");
+        board.innerHTML = "";
+
+        for (let i = 0; i < 5; i++) {
+            for (let j = 0; j < 5; j++) {
+                const ceil = document.createElement('div');
+                ceil.classList.add('ceil');
+                ceil.addEventListener("click", ()=>move(i,j));
+                ceil.innerText = pattern[i][j] == 2 ? "⭕" : pattern[i][j] == 1 ? "❌" : "";
+                board.appendChild(ceil);
+            }
+            board.appendChild(document.createElement('br'));
         }
-    </style>
-</head>
-<body>
-    <div class="box"></div>
-</body>
-</html>
+    }
+    function move(x,y){
+        pattern[x][y] = color;
+        if(check(pattern, color)){
+            let win = pattern[x][y] == 2 ? "⭕ is win" :"❌ is win";
+            console.log(win);
+        }
+        color = 3 - color;
+        if(willWin(pattern, color)){
+             let will_win = pattern[x][y] == 1 ? "⭕ will win" : "❌ will win";
+            console.log(will_win);
+        }
+        show();
+    }
+    function check(pattern, color){
+        // 按行遍历
+        for(let i = 0; i < len; i++){
+            let win = true;
+            for(let j = 0; j < len; j++){
+                if(pattern[i][j] !== color){
+                    win = false;
+                    break;
+                }
+            }
+            if(win) return win;
+        }
+
+        // 案列遍历
+         for (let i = 0; i < len; i++) {
+            let win = true;
+            for (let j = 0; j < len; j++) {
+                if (pattern[j][i] !== color) {
+                    win = false;
+                    break;
+                }
+            }
+            if (win) return win;
+        }
+
+        // 按主对角遍历
+        {
+            let win = true;
+            for (let i = 0; i < len; i++) {
+                if (pattern[i][i] !== color) {
+                    win = false;
+                }
+            }
+            return win;
+        }
+
+        // 按照副对角线
+        {
+            let win = true;
+            for(let i = 0; i < len; i++){
+                if(pattern[i][4 - i] !== color){
+                    win = false;
+                }
+            }
+            return win;
+        }
+
+    }
+
+    // 深拷贝
+    function clone(pattern){
+        return JSON.parse(JSON.stringify(pattern));
+    }
+
+    function willWin(pattern, color){
+        for(let i = 0; i < len; i++){
+            for(let j = 0; j < len; j++){
+                if(pattern[i][j]) continue;
+                let tmp = clone(pattern);
+                tmp[i][j] = color;
+                if(check(tmp, color)) return true;
+            }
+        }
+        return false;
+    }
+    show();
+</script>

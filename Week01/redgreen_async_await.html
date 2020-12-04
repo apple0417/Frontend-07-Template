@@ -1,0 +1,80 @@
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .wrapper{
+        width: 310px;
+        height: 100px;
+        margin: 50px auto;
+    }
+    .wrapper div{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: gray;
+        /* margin: 0px auto; */
+    }
+    .green.light{
+        background-color: green;
+    }
+    .red.light{
+        background-color: red;
+    }
+    .yellow.light{
+        background-color: yellow;
+    }
+</style>
+
+
+<div class="wrapper">
+    <div class="green box"></div>
+    <div class="red box"></div>
+    <div class="yellow box"></div>
+</div>
+
+
+
+<script>
+    const lights = document.querySelectorAll('.box');
+    // console.log(lights);
+    function green(){
+        for(let i = 0; i < lights.length; i++){
+            lights[i].classList.remove('light');
+        }
+        document.querySelector('.green').classList.add('light');
+    }
+
+    function red(){
+        for(let i = 0;i < lights.length; i++){
+            lights[i].classList.remove('light');
+        }
+        document.querySelector('.red').classList.add('light');
+    }
+
+    function yellow(){
+        for(let i = 0; i < lights.length; i++){
+            lights[i].classList.remove('light');
+        }
+        document.querySelector('.yellow').classList.add('light');
+    }
+
+
+    function sleep(t){
+        return new Promise((reslove, reject)=>{
+            setTimeout(reslove, t);
+        });
+    }
+    
+    async function go(){
+        while(true){
+            green();
+            await sleep(1000);
+            yellow();
+            await sleep(200);
+            red();
+            await sleep(500);
+        }
+    }
+</script>

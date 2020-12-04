@@ -1,0 +1,72 @@
+<!-- JavaScript中的三种异步机制：
+    1.Promise
+    2.callback
+    3.asyn/await
+-->
+
+<!-- 红绿灯异步问题 -->
+<style>
+    div{
+        background-color: gray;
+        display: inline-block;
+        margin: 30px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+    .green.light{
+        background-color: green;
+    }
+    .red.light{
+        background-color: red;
+    }
+    .yellow.light{
+        background-color: yellow;
+    }
+</style>
+
+<div class="green"></div>
+<div class="yellow"></div>
+<div class="red"></div>
+
+<script>
+    function green(){
+        var lights = document.querySelectorAll('div');
+        for(let i = 0; i < lights.length; i++){
+            lights[i].classList.remove("light");
+        }
+        document.querySelector('.green').classList.add('light');
+    }
+    function red(){
+        var lights = document.querySelectorAll('div');
+        for(let i = 0; i < lights.length; i++){
+            lights[i].classList.remove('light');
+        }
+        document.querySelector('.red').classList.add('light');
+    }
+    function yellow(){
+        var lights = document.querySelectorAll('div');
+        for(let i = 0; i < lights.length; i++){
+            lights[i].classList.remove('light');
+        }
+        document.querySelector('.yellow').classList.add('light');
+    }
+    // 通过Promise实现异步，避免回调地狱
+    // promise--链式表达式的方式，避免回调地狱
+    function sleep(t){
+        return new Promise((resolve, reject)=>{
+            setTimeout(resolve, t);
+        });
+    }
+    // 递归
+    function go(){
+        green();
+        sleep(1000).then(()=>{
+            yellow();
+            return sleep(200);
+        }).then(()=>{
+            red();
+            return sleep(500);
+        }).then(go)
+    }
+</script>
