@@ -6,7 +6,10 @@
 （1）callback
 （2）promise
 （3）async/await
-（4）产生器
-其中重点掌握promise，async/await思想和使用方法
+（4）generator
 拓展：
-宏任务与微任务
+1.宏任务与微任务
+-->什么是宏任务，什么是微任务，给出一段代码，输出执行结果，并解释
+2.实现红绿灯效果
+-->掌握promise、async/await的思想，学会运用
+
