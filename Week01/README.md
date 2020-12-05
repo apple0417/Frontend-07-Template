@@ -1,1 +1,12 @@
-学习笔记
+编程与算法训练：
+一、TicTacToe
+二、红绿灯的实现
+总结：
+实现异步编程：
+（1）callback
+（2）promise
+（3）async/await
+（4）产生器
+其中重点掌握promise，async/await思想和使用方法
+拓展：
+宏任务与微任务
