@@ -1,0 +1,107 @@
+<!-- 异步处理可视化 -->
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .cell {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        line-height: 7px;
+        background-color: gray;
+        border-bottom: solid 1px white;
+        border-right: solid 1px white;
+        vertical-align: top;
+    }
+
+    #container {
+        width: 701px;
+    }
+</style>
+
+<div id="container"></div>
+<button id="btn">save</button>
+
+<script>
+    let m = localStorage["m"] ? JSON.parse(localStorage["m"]) : Array(10000).fill(0);
+
+    let container = document.querySelector('#container');
+    let btn = document.querySelector('#btn');
+
+
+    for (let i = 0; i < 100; i++) {
+        for (let j = 0; j < 100; j++) {
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+
+            if (m[100 * i + j] == 1)
+                cell.style.backgroundColor = "black";
+
+            cell.addEventListener("mousemove", () => {
+                if (mousedown) {
+                    if (clear) {
+                        cell.style.backgroundColor = "";
+                        m[100 * i + j] = 0;
+                    } else {
+                        cell.style.backgroundColor = "black";
+                        m[100 * i + j] = 1;
+                    }
+                }
+            });
+            container.appendChild(cell);
+        }
+    }
+    let mousedown = false;
+    let clear = false;
+    document.addEventListener("mousedown", e => {
+        mousedown = true;
+        clear = (e.which === 3)
+    });
+    document.addEventListener("mouseup", () => mousedown = false);
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    // 点击按钮，实现地图的保存
+    btn.addEventListener('click', () => {
+        // console.log('save');
+        localStorage['m'] = JSON.stringify(m);
+    })
+
+    // 异步处理
+    function sleep(t){
+        return new Promise((resolve, reject)=>{
+            setTimeout(resolve,t);
+        })
+    }
+
+    // 实现广度优先算法
+    let queue = [];
+    async function path(m, start, end) {
+        queue.push(start);
+
+        while (queue.length) {
+            let [x, y] = queue.shift();
+            console.log(x, y);
+            if (x == end[0] && y == end[1]) {
+                return true;
+            }
+            await insert(x - 1, y);
+            await insert(x + 1, y);
+            await insert(x, y + 1);
+            await insert(x, y - 1);
+        }
+
+        async function insert(i, j) {
+            if (i < 0 || i >= 100 || j < 0 || j >= 100) return false;
+            if (m[i * 100 + j]) return false;
+
+            await sleep(30);
+            container.children[i * 100 + j].style.backgroundColor = "lightgreen";
+            m[i * 100 + j] = 2;
+            queue.push([i, j]);
+        }
+        return false;
+    }
+</script>
