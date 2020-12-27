@@ -1,0 +1,43 @@
+<script>
+    // kmp字符串模式匹配算法
+    // source串、pattern串
+    // 关注字符串的字重复行为
+    // KMP算法分为两部分：匹配表格（跳转表格）、匹配
+    function kmp(source, pattern){
+        // 1.跳转表格
+        let table = new Array(pattern.length).fill(0);
+       {
+            // 字符串的i，j    i:计算字重复的起使位置 j:字重复的个数
+            let i = 1, j = 0;
+            while (i < pattern.length) {
+                if (pattern[i] === pattern[j]) {
+                    i++;
+                    j++;
+                    table[i] = j;
+                } else {
+                    if (j > 0)
+                        j = table[j];
+                    else
+                        ++i;
+                }
+            }
+       }
+        // 2.匹配
+        {
+            let i = 0, j = 0;
+            while(i < source.length){
+                if(pattern[j] === source[i]){
+                    ++i;
+                    ++j;
+                }else{
+                    if(j > 0) j = table[j];
+                    else ++i;
+                }
+                if(j === pattern.length)
+                    return true;
+            }
+            return false;
+        }
+    }
+
+</script>
