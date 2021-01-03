@@ -1,0 +1,18 @@
+<script>
+    const object = {
+        a:1,
+        b:2
+    }
+    const po = new Proxy(object,{
+        get(obj, pro){
+            let result = obj[pro];
+            return result+='hello';
+        },
+
+        set(obj, pro, val){
+            obj[pro] = val;
+            console.log(obj, pro, val);
+            return obj[pro];
+        }
+    });
+</script>

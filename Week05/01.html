@@ -1,0 +1,27 @@
+<script>
+    // 无操作转发代理
+    const object = {};
+    const po = new Proxy(object, {});
+    po.a = 37;
+    console.log(object.a);
+    // 验证
+    let validator = {
+        set(obj, prop, value){
+            if(prop === 'age'){
+                if(!Number.isInteger(value)){
+                    throw new TypeError('The age is not an integer');
+                }
+                if(value > 200){
+                    throw new RangeError('The age seems invalid');
+                }
+            }
+            obj[prop] = value;
+            return true;
+        }
+    };
+    let person = new Proxy({}, validator);
+    person.age = 100;
+    console.log(person.age);
+    // person.age = 'young';
+    // person.age = 300;
+</script>
